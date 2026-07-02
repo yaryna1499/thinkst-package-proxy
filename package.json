@@ -1,0 +1,20 @@
+{
+  "name": "thinkst-package-proxy",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "deploy": "npm run db:migrations:apply && wrangler deploy",
+    "dev": "wrangler dev",
+    "start": "wrangler dev",
+    "test": "vitest",
+    "cf-typegen": "wrangler types",
+    "db:migrations:apply": "wrangler d1 migrations apply install_logs --remote"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.16.9",
+    "@types/node": "^25.5.0",
+    "typescript": "^5.5.2",
+    "vitest": "^4.1.2",
+    "wrangler": "^4.80.0"
+  }
+}
