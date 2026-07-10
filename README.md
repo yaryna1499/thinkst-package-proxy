@@ -22,7 +22,7 @@ Alternatively, here are the manual steps:
 5. **npm**:
    ```$ npm config set registry https://$DOMAIN && npm config set //$DOMAIN/:_auth=$(echo -n "$USER:" | base64)```
 
-### Registry authentication (Algoseek)
+### Registry authentication
 
 By default, the upstream Thinkst worker only checks that an `Authorization` header exists on some routes and still allows tarball downloads without credentials.
 
@@ -42,14 +42,14 @@ This fork adds strict validation when the Worker secret `TOKEN` is configured:
    npm run deploy
    ```
 
-3. Client repos should already point npm at the proxy and send the token via `.npmrc`:
+3. Client repos should point npm at the proxy and send the token via `.npmrc` (replace `$PACKAGE_PROXY_DOMAIN` with your Worker hostname):
 
    ```ini
-   registry=https://thinkst-package-proxy.algoseek.workers.dev
-   //thinkst-package-proxy.algoseek.workers.dev/:_authToken=${NPM_PACKAGE_PROXY_TOKEN}
+   registry=https://$PACKAGE_PROXY_DOMAIN
+   //$PACKAGE_PROXY_DOMAIN/:_authToken=${NPM_PACKAGE_PROXY_TOKEN}
    ```
 
-   `NPM_PACKAGE_PROXY_TOKEN` is the **local/CI env var name** in Algoseek repos. Its value must match the Worker secret `TOKEN`.
+   `NPM_PACKAGE_PROXY_TOKEN` is the **local/CI env var name** in consuming repos. Its value must match the Worker secret `TOKEN`.
 
 When the secret is set, **all org-hostname requests** (metadata and `.tgz` downloads) require a matching token sent as either:
 

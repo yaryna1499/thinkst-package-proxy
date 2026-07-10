@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { evaluateProxyAuth, extractProxyToken } from '../src/auth';
 
 const TOKEN = 'test-proxy-token';
-const ORIGIN = 'https://thinkst-package-proxy.algoseek.workers.dev';
+const ORIGIN = 'https://proxy.example.com';
 const LOCAL_ORIGIN = 'http://example.com';
 
 describe('extractProxyToken', () => {
