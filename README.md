@@ -22,42 +22,6 @@ Alternatively, here are the manual steps:
 5. **npm**:
    ```$ npm config set registry https://$DOMAIN && npm config set //$DOMAIN/:_auth=$(echo -n "$USER:" | base64)```
 
-### Registry authentication
-
-By default, the upstream Thinkst worker only checks that an `Authorization` header exists on some routes and still allows tarball downloads without credentials.
-
-This fork adds strict validation when the Worker secret `TOKEN` is configured:
-
-1. Confirm the secret exists in Cloudflare (**Workers → Settings → Variables and secrets**). It should already be named `TOKEN`.
-
-   To rotate or set it via CLI:
-
-   ```bash
-   npx wrangler secret put TOKEN
-   ```
-
-2. Deploy the worker:
-
-   ```bash
-   npm run deploy
-   ```
-
-3. Client repos should point npm at the proxy and send the token via `.npmrc` (replace `$PACKAGE_PROXY_DOMAIN` with your Worker hostname):
-
-   ```ini
-   registry=https://$PACKAGE_PROXY_DOMAIN
-   //$PACKAGE_PROXY_DOMAIN/:_authToken=${NPM_PACKAGE_PROXY_TOKEN}
-   ```
-
-   `NPM_PACKAGE_PROXY_TOKEN` is the **local/CI env var name** in consuming repos. Its value must match the Worker secret `TOKEN`.
-
-When the secret is set, **all org-hostname requests** (metadata and `.tgz` downloads) require a matching token sent as either:
-
-- npm `_authToken` → `Authorization: Bearer <token>`
-- basic auth password → `Authorization: Basic base64(user:<token>)`
-
-If the secret is not configured, the worker keeps the legacy behavior so local/tests do not break.
-
 ### Usage
 
 Use the package manager as normal, though if a package version has been removed, the client will simply report it is not found (HTTP 404) and not the specific error/reason for its removal.
